@@ -7,10 +7,10 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.calyrsoft.ucbp1.features.cardexample.presentation.CardScreen
-import com.calyrsoft.ucbp1.features.dollar.presentation.DollarScreen
-import com.calyrsoft.ucbp1.features.github.presentation.GithubScreen
-import com.calyrsoft.ucbp1.features.movie.presentation.PopularMoviesScreen
 import com.calyrsoft.ucbp1.features.profile.application.ProfileScreen
+import com.calyrsoft.ucbp1.features.login.presentation.LoginScreen
+import com.calyrsoft.ucbp1.features.login.presentation.LoginViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 
 @Composable
 fun AppNavigation() {
@@ -18,10 +18,14 @@ fun AppNavigation() {
 
     NavHost(
         navController = navController,
-        startDestination = Screen.Dollar.route
+        startDestination = Screen.Login.route // Ahora inicia en login
     ) {
-        composable(Screen.Github.route) {
-            GithubScreen(modifier = Modifier)
+        composable(Screen.Login.route) {
+            val loginViewModel: LoginViewModel = viewModel()
+            LoginScreen(
+                navController = navController,
+                viewModel = loginViewModel
+            )
         }
         composable(Screen.Home.route) {
 
@@ -31,11 +35,5 @@ fun AppNavigation() {
         }
 
         composable(Screen.CardExamples.route) { CardScreen() }
-
-        composable(Screen.Dollar.route) {
-            DollarScreen()
-        }
-
-        composable(Screen.PopularMovies.route) { PopularMoviesScreen() }
     }
 }
