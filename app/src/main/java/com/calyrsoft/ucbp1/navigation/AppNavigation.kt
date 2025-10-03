@@ -27,6 +27,10 @@ fun AppNavigation() {
                 viewModel = loginViewModel
             )
         }
+        composable(Screen.LoginPart.route) {
+            val loginPartViewModel = com.calyrsoft.ucbp1.features.loginPart.presentation.LoginPartViewModel()
+            com.calyrsoft.ucbp1.features.loginPart.presentation.LoginPartScreen(viewModel = loginPartViewModel)
+        }
         composable(Screen.Home.route) {
 
         }

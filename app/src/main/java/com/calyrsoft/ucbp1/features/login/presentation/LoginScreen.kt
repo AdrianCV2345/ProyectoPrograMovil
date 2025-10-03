@@ -67,7 +67,7 @@ fun LoginScreen(
         OutlinedButton(
             onClick = {
                 viewModel.onLoginClick()
-                navController.navigate(Screen.Profile.route)
+                navController.navigate(com.calyrsoft.ucbp1.navigation.Screen.LoginPart.route)
             },
             modifier = Modifier
                 .fillMaxWidth(0.7f)
