@@ -103,7 +103,7 @@ fun LoginScreen(
         Button(
             onClick = {
                 viewModel.onCreateAccountClick()
-                navController.navigate(Screen.Profile.route)
+                navController.navigate(com.calyrsoft.ucbp1.navigation.Screen.Registro.route)
             },
             modifier = Modifier
                 .fillMaxWidth(0.7f)

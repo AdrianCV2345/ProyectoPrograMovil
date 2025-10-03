@@ -1,10 +1,6 @@
 package com.calyrsoft.ucbp1.di
 
 import com.calyrsoft.ucbp1.R
-import com.calyrsoft.ucbp1.features.profile.application.ProfileViewModel
-import com.calyrsoft.ucbp1.features.profile.data.repository.ProfileRepository
-import com.calyrsoft.ucbp1.features.profile.domain.repository.IProfileRepository
-import com.calyrsoft.ucbp1.features.profile.domain.usecase.GetProfileUseCase
 import okhttp3.OkHttpClient
 import org.koin.android.BuildConfig
 import org.koin.android.ext.koin.androidApplication
@@ -52,11 +48,6 @@ val appModule = module {
             .addConverterFactory(GsonConverterFactory.create())
             .build()
     }
-
-
-    single<IProfileRepository> { ProfileRepository() }
-    factory { GetProfileUseCase(get()) }
-    viewModel { ProfileViewModel(get()) }
 
 
 

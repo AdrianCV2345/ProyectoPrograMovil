@@ -6,8 +6,6 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.calyrsoft.ucbp1.features.cardexample.presentation.CardScreen
-import com.calyrsoft.ucbp1.features.profile.application.ProfileScreen
 import com.calyrsoft.ucbp1.features.login.presentation.LoginScreen
 import com.calyrsoft.ucbp1.features.login.presentation.LoginViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -34,10 +32,11 @@ fun AppNavigation() {
         composable(Screen.Home.route) {
 
         }
-        composable(Screen.Profile.route) {
-            ProfileScreen()
-        }
 
-        composable(Screen.CardExamples.route) { CardScreen() }
+
+        composable(Screen.Registro.route) {
+            val registroViewModel = com.calyrsoft.ucbp1.features.registro.presentation.RegistroViewModel()
+            com.calyrsoft.ucbp1.features.registro.presentation.RegistroScreen(viewModel = registroViewModel)
+        }
     }
 }
