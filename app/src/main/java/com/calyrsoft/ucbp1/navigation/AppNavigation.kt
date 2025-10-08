@@ -16,7 +16,7 @@ fun AppNavigation() {
 
     NavHost(
         navController = navController,
-        startDestination = Screen.Login.route // Ahora inicia en login
+            startDestination = Screen.Login.route // Ahora inicia en login
     ) {
         composable(Screen.Login.route) {
             val loginViewModel: LoginViewModel = viewModel()
@@ -37,6 +37,10 @@ fun AppNavigation() {
         composable(Screen.Registro.route) {
             val registroViewModel = com.calyrsoft.ucbp1.features.registro.presentation.RegistroViewModel()
             com.calyrsoft.ucbp1.features.registro.presentation.RegistroScreen(viewModel = registroViewModel)
+        }
+        composable(Screen.Menu.route) {
+            val menuViewModel = com.calyrsoft.ucbp1.features.menu.presentation.MenuViewModel()
+            com.calyrsoft.ucbp1.features.menu.presentation.MenuScreen(viewModel = menuViewModel)
         }
     }
 }

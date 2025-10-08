@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CopilotDiffPersistence">
+    <option name="pendingDiffs">
+      <map>
+        <entry key="$PROJECT_DIR$/app/src/main/java/com/calyrsoft/ucbp1/features/menu/presentation/MenuViewModel.kt">
+          <value>
+            <PendingDiffInfo>
+              <option name="filePath" value="$PROJECT_DIR$/app/src/main/java/com/calyrsoft/ucbp1/features/menu/presentation/MenuViewModel.kt" />
+              <option name="originalContent" value="package com.calyrsoft.ucbp1.features.menu.presentation&#10;&#10;import androidx.compose.runtime.getValue&#10;import androidx.compose.runtime.mutableStateOf&#10;import androidx.compose.runtime.setValue&#10;&#10;class MenuViewModel {&#10;    // Contadores para cada hamburguesa&#10;    var bossguerCount by mutableStateOf(0)&#10;    var jefazaCount by mutableStateOf(0)&#10;    var ejecutivaCount by mutableStateOf(0)&#10;    var customCount by mutableStateOf(0)&#10;&#10;    // Bebidas y extras&#10;    var aguaCount by mutableStateOf(0)&#10;    var jugoCount by mutableStateOf(0)&#10;    var sodaCount by mutableStateOf(0)&#10;    var papasCount by mutableStateOf(0)&#10;    var arosCebollaCount by mutableStateOf(0)&#10;&#10;    fun addBossguer() { bossguerCount++ }&#10;    fun removeBossguer() { if (bossguerCount &gt; 0) bossguerCount-- }&#10;    fun addJefaza() { jefazaCount++ }&#10;    fun removeJefaza() { if (jefazaCount &gt; 0) jefazaCount-- }&#10;    fun addEjecutiva() { ejecutivaCount++ }&#10;    fun removeEjecutiva() { if (ejecutivaCount &gt; 0) ejecutivaCount-- }&#10;    fun addCustom() { customCount++ }&#10;    fun removeCustom() { if (customCount &gt; 0) customCount-- }&#10;&#10;    fun addAgua() { aguaCount++ }&#10;    fun addJugo() { jugoCount++ }&#10;    fun addSoda() { sodaCount++ }&#10;    fun addPapas() { papasCount++ }&#10;    fun addArosCebolla() { arosCebollaCount++ }&#10;}" />
+              <option name="updatedContent" value="package com.calyrsoft.ucbp1.features.menu.presentation&#10;&#10;import androidx.compose.runtime.getValue&#10;import androidx.compose.runtime.mutableStateOf&#10;import androidx.compose.runtime.setValue&#10;&#10;class MenuViewModel {&#10;    // Contadores para cada hamburguesa&#10;    var bossguerCount by mutableStateOf(0)&#10;    var jefazaCount by mutableStateOf(0)&#10;    var ejecutivaCount by mutableStateOf(0)&#10;    var customCount by mutableStateOf(0)&#10;&#10;    // Bebidas y extras&#10;    var aguaCount by mutableStateOf(0)&#10;    var jugoCount by mutableStateOf(0)&#10;    var sodaCount by mutableStateOf(0)&#10;    var papasCount by mutableStateOf(0)&#10;    var arosCebollaCount by mutableStateOf(0)&#10;&#10;    fun addBossguer() { bossguerCount++ }&#10;    fun removeBossguer() { if (bossguerCount &gt; 0) bossguerCount-- }&#10;    fun addJefaza() { jefazaCount++ }&#10;    fun removeJefaza() { if (jefazaCount &gt; 0) jefazaCount-- }&#10;    fun addEjecutiva() { ejecutivaCount++ }&#10;    fun removeEjecutiva() { if (ejecutivaCount &gt; 0) ejecutivaCount-- }&#10;    fun addCustom() { customCount++ }&#10;    fun removeCustom() { if (customCount &gt; 0) customCount-- }&#10;&#10;    fun addAgua() { aguaCount++ }&#10;    fun addJugo() { jugoCount++ }&#10;    fun addSoda() { sodaCount++ }&#10;    fun addPapas() { papasCount++ }&#10;    fun addArosCebolla() { arosCebollaCount++ }&#10;}" />
+            </PendingDiffInfo>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+</project>
