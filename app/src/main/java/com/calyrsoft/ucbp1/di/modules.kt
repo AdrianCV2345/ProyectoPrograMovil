@@ -1,10 +1,19 @@
 package com.calyrsoft.ucbp1.di
 
+import androidx.room.Room
 import com.calyrsoft.ucbp1.R
+import com.calyrsoft.ucbp1.data.local.UcbpDatabase
+import com.calyrsoft.ucbp1.features.registro.data.repository.RegisterRepository
+import com.calyrsoft.ucbp1.features.registro.data.source.local.IRegisterLocalDataSource
+import com.calyrsoft.ucbp1.features.registro.data.source.local.RegisterLocalDataSource
+import com.calyrsoft.ucbp1.features.registro.data.source.remote.IRegisterRemoteDataSource
+import com.calyrsoft.ucbp1.features.registro.data.source.remote.RegisterRemoteDataSource
+import com.calyrsoft.ucbp1.features.registro.domain.repository.IRegisterRepository
+import com.calyrsoft.ucbp1.features.registro.domain.usecase.RegisterUseCase
+import com.calyrsoft.ucbp1.features.registro.presentation.RegistroViewModel
+import com.google.firebase.auth.FirebaseAuth
 import okhttp3.OkHttpClient
-import org.koin.android.BuildConfig
 import org.koin.android.ext.koin.androidApplication
-import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
@@ -20,7 +29,6 @@ object NetworkConstants {
 }
 
 val appModule = module {
-
 
     // OkHttpClient
     single {
@@ -40,7 +48,6 @@ val appModule = module {
             .build()
     }
 
-    // Retrofit
     single(named(NetworkConstants.RETROFIT_MOVIE)) {
         Retrofit.Builder()
             .baseUrl(NetworkConstants.MOVIE_BASE_URL)
@@ -49,10 +56,35 @@ val appModule = module {
             .build()
     }
 
-
-
     single(named("apiKey")) {
         androidApplication().getString(R.string.api_key)
     }
 
+    // Configuración de la Base de Datos Room
+    single {
+        Room.databaseBuilder(androidApplication(), UcbpDatabase::class.java, "ucbp-db")
+            .fallbackToDestructiveMigration() // Opcional: útil en desarrollo
+            .build()
+    }
+
+    // --- Flujo de Registro ---
+
+    // Firebase
+    single { FirebaseAuth.getInstance() }
+
+    // DAOs
+    single { get<UcbpDatabase>().userDao() }
+
+    // DataSources
+    single<IRegisterRemoteDataSource> { RegisterRemoteDataSource(get()) }
+    single<IRegisterLocalDataSource> { RegisterLocalDataSource(get()) }
+
+    // Repositorio
+    single<IRegisterRepository> { RegisterRepository(get(), get()) }
+
+    // Casos de Uso
+    single { RegisterUseCase(get()) }
+
+    // ViewModel
+    viewModel { RegistroViewModel(get()) }
 }
