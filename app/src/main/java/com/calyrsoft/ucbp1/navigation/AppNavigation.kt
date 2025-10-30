@@ -1,7 +1,6 @@
 package com.calyrsoft.ucbp1.navigation
 
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -9,6 +8,7 @@ import androidx.navigation.compose.rememberNavController
 import com.calyrsoft.ucbp1.features.login.presentation.LoginScreen
 import com.calyrsoft.ucbp1.features.login.presentation.LoginViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.calyrsoft.ucbp1.features.login.presentation.SplashScreen.SplashScreen
 
 @Composable
 fun AppNavigation() {
@@ -16,8 +16,17 @@ fun AppNavigation() {
 
     NavHost(
         navController = navController,
-            startDestination = Screen.Login.route // Ahora inicia en login
+        startDestination = Screen.SplashScreen.route // Inicia en el SplashScreen
     ) {
+        composable(Screen.SplashScreen.route) {
+            SplashScreen(onNavigate = {
+                navController.navigate(Screen.Login.route) {
+                    // Limpia el stack para que el usuario no pueda volver al SplashScreen
+                    popUpTo(Screen.SplashScreen.route) { inclusive = true }
+                }
+            })
+        }
+
         composable(Screen.Login.route) {
             val loginViewModel: LoginViewModel = viewModel()
             LoginScreen(
