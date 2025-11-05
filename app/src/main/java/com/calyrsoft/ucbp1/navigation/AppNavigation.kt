@@ -9,6 +9,9 @@ import com.calyrsoft.ucbp1.features.login.presentation.LoginScreen
 import com.calyrsoft.ucbp1.features.login.presentation.LoginViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.calyrsoft.ucbp1.features.login.presentation.SplashScreen.SplashScreen
+import com.calyrsoft.ucbp1.features.registro.presentation.RegistroScreen
+import com.calyrsoft.ucbp1.features.registro.presentation.RegistroViewModel
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun AppNavigation() {
@@ -44,8 +47,9 @@ fun AppNavigation() {
 
 
         composable(Screen.Registro.route) {
-            val registroViewModel = com.calyrsoft.ucbp1.features.registro.presentation.RegistroViewModel()
-            com.calyrsoft.ucbp1.features.registro.presentation.RegistroScreen(viewModel = registroViewModel)
+            // Le pedimos a Koin que nos de el ViewModel. Koin ya sabe como construirlo.
+            val registroViewModel: RegistroViewModel = koinViewModel()
+            RegistroScreen(viewModel = registroViewModel)
         }
         composable(Screen.Menu.route) {
             val menuViewModel = com.calyrsoft.ucbp1.features.menu.presentation.MenuViewModel()
