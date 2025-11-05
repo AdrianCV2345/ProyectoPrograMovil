@@ -2,18 +2,38 @@ package com.calyrsoft.ucbp1.features.menu.presentation
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -21,195 +41,175 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.calyrsoft.ucbp1.R
 
+// Data class para representar una hamburguesa, facilita la gestión
+data class Burger(val name: String, val desc: String, val price: String, val imageRes: Int)
+
 @Composable
 fun MenuScreen(viewModel: MenuViewModel) {
+    // Lista de hamburguesas (puedes mover esto a tu ViewModel)
+    val burgers = listOf(
+        Burger("Bossguer", "La original, inigualable e inconfundible.", "35,00 Bs.", R.drawable.burger_bossguer),
+        Burger("La Jefaza", "Cargada con todo, solo para los verdaderos jefes.", "37,00 Bs.", R.drawable.burger_jefaza),
+        Burger("Bossguer", "La original, inigualable e inconfundible.", "35,00 Bs.", R.drawable.burger_bossguer),
+        Burger("La Ejecutiva", "Elegante, potente y llena de poder.", "37,00 Bs.", R.drawable.burger_ejecutiva),
+        Burger("Arma La Tuya!", "Hoy, tú eres el Boss!", "35,00 Bs.", R.drawable.burger_custom)
+    )
+
     Box(
         modifier = Modifier
             .fillMaxSize()
             .background(Color.White)
     ) {
-        Column(
+        // Usamos LazyColumn para un rendimiento óptimo en listas largas y para facilitar el espaciado
+        LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(bottom = 64.dp)
-                .verticalScroll(rememberScrollState()),
-            horizontalAlignment = Alignment.CenterHorizontally
+                .padding(bottom = 64.dp), // Padding para no superponer con la barra inferior
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(24.dp) // 1. AUMENTADA LA SEPARACIÓN ENTRE ELEMENTOS
         ) {
-            // Imagen principal y encabezado superpuestos
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(400.dp)
-            ) {
-                Image(
-                    painter = painterResource(id = R.drawable.menu_header),
-                    contentDescription = "Menu header",
-                    modifier = Modifier.fillMaxSize()
-                )
-                // Textos sobre la imagen
-                Column(
-                    modifier = Modifier
-                        .align(Alignment.BottomStart)
-                        .padding(start = 16.dp, end = 16.dp, bottom = 0.dp) // Solo padding horizontal y mínimo abajo
-                ) {
-                    Text(
-                        text = "NUESTRO MENÚ",
-                        color = Color.White,
-                        fontSize = 22.sp,
-                        fontWeight = FontWeight.Bold
-                    )
-                    Text(
-                        text = "Pedí tu Boss Favorita!",
-                        color = Color.White,
-                        fontSize = 16.sp,
-                        fontWeight = FontWeight.Medium
-                    )
-                }
-                // Encabezado superpuesto arriba de la imagen
-                Row(
+            item {
+                // Contenedor para la imagen principal y los encabezados
+                Box(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .background(Color(0xFFF4D8CD).copy(alpha = 0.85f))
-                        .align(Alignment.TopCenter),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceBetween
+                        .height(400.dp)
                 ) {
-                    IconButton(onClick = { /* TODO: Navegar atrás */ }) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.ic_back),
-                            contentDescription = "Atrás",
-                            tint = Color(0xFF5A2A06),
-                            modifier = Modifier.size(28.dp)
+                    Image(
+                        painter = painterResource(id = R.drawable.menu_header),
+                        contentDescription = "Menu header",
+                        modifier = Modifier.fillMaxSize(),
+                        contentScale = ContentScale.Crop
+                    )
+                    // 3. ENCABEZADO CENTRADO
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .align(Alignment.BottomCenter)
+                            .padding(bottom = 8.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Text(
+                            text = "NUESTRO MENÚ",
+                            color = Color.White,
+                            fontSize = 22.sp,
+                            fontWeight = FontWeight.Bold,
+                            textAlign = TextAlign.Center
+                        )
+                        Text(
+                            text = "Pedí tu Boss Favorita!",
+                            color = Color.White,
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight.Medium,
+                            textAlign = TextAlign.Center
                         )
                     }
-                    Image(
-                        painter = painterResource(id = R.drawable.bossguer_logo),
-                        contentDescription = "Logo Bossguer",
-                        modifier = Modifier.size(56.dp)
-                    )
-                    IconButton(onClick = { /* TODO: Ir al carrito */ }) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.ic_cart),
-                            contentDescription = "Carrito",
-                            tint = Color(0xFF5A2A06),
-                            modifier = Modifier.size(28.dp)
+                    // Barra de navegación superior
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .background(Color(0xFFF4D8CD).copy(alpha = 0.85f))
+                            .align(Alignment.TopCenter),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        IconButton(onClick = { /* TODO: Navegar atrás */ }) {
+                            Icon(
+                                painter = painterResource(id = R.drawable.ic_back),
+                                contentDescription = "Atrás",
+                                tint = Color(0xFF5A2A06),
+                                modifier = Modifier.size(28.dp)
+                            )
+                        }
+                        Image(
+                            painter = painterResource(id = R.drawable.bossguer_logo),
+                            contentDescription = "Logo Bossguer",
+                            modifier = Modifier.size(56.dp)
                         )
+                        IconButton(onClick = { /* TODO: Ir al carrito */ }) {
+                            Icon(
+                                painter = painterResource(id = R.drawable.ic_cart),
+                                contentDescription = "Carrito",
+                                tint = Color(0xFF5A2A06),
+                                modifier = Modifier.size(28.dp)
+                            )
+                        }
                     }
                 }
             }
-            // Sección Hamburguesas
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(Color(0xFF8C1C1C))
-            ) {
-                Text(
-                    text = "HAMBURGUESAS",
-                    color = Color.White,
-                    fontSize = 18.sp,
-                    fontWeight = FontWeight.Bold,
-                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
+            item {
+                // Título de la sección "HAMBURGUESAS"
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(Color(0xFF8C1C1C))
+                        .padding(horizontal = 16.dp, vertical = 8.dp)
+                ) {
+                    Text(
+                        text = "HAMBURGUESAS",
+                        color = Color.White,
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.Bold
+                    )
+                }
+            }
+            // Lista de tarjetas de hamburguesas
+            items(burgers) { burger ->
+                MenuBurgerCard(
+                    imageRes = burger.imageRes,
+                    name = burger.name,
+                    desc = burger.desc,
+                    price = burger.price
                 )
             }
-            // Cards hamburguesas
-            MenuBurgerCard(
-                imageRes = R.drawable.burger_bossguer,
-                name = "Bossguer",
-                desc = "La original, inigualable e inconfundible.",
-                price = "35,00Bs."
-            )
-            MenuBurgerCard(
-                imageRes = R.drawable.burger_jefaza,
-                name = "La Jefaza",
-                desc = "Cargada con todo, solo para los verdaderos jefes.",
-                price = "37,00Bs."
-            )
-            MenuBurgerCard(
-                imageRes = R.drawable.burger_bossguer,
-                name = "Bossguer",
-                desc = "La original, inigualable e inconfundible.",
-                price = "35,00Bs."
-            )
-            MenuBurgerCard(
-                imageRes = R.drawable.burger_ejecutiva,
-                name = "La Ejecutiva",
-                desc = "Elegante, potente y llena de poder.",
-                price = "37,00Bs."
-            )
-            MenuBurgerCard(
-                imageRes = R.drawable.burger_bossguer,
-                name = "Bossguer",
-                desc = "Hoy, tu eres el Boss!",
-                price = "35,00Bs."
-            )
-            // Arma la tuya
-            Spacer(modifier = Modifier.height(8.dp))
-            Card(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 4.dp),
-                shape = RoundedCornerShape(16.dp),
-                elevation = CardDefaults.cardElevation(4.dp)
-            ) {
+            
+            item {
+                // Sección final con aclaración, bebidas y extras
                 Column(
-                    modifier = Modifier.padding(12.dp),
+                    modifier = Modifier.fillMaxWidth(),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Image(
-                        painter = painterResource(id = R.drawable.burger_custom),
-                        contentDescription = "Arma la tuya",
-                        modifier = Modifier.height(100.dp)
-                    )
+                    Spacer(modifier = Modifier.height(4.dp))
                     Text(
-                        text = "Arma La Tuya!",
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 16.sp,
+                        text = "ACLARACIÓN: Todas nuestras Boss incluyen porción de papas :)",
+                        fontSize = 12.sp,
                         color = Color(0xFF5A2A06),
-                        modifier = Modifier.padding(top = 8.dp)
+                        modifier = Modifier.padding(vertical = 8.dp, horizontal = 8.dp)
                     )
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .background(Color(0xFF8C1C1C))
+                    ) {
+                        Text(
+                            text = "BEBIDAS",
+                            color = Color.White,
+                            fontSize = 18.sp,
+                            fontWeight = FontWeight.Bold,
+                            modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
+                        )
+                    }
+                    MenuDrinkRow("Agua", "9,00 Bs.")
+                    MenuDrinkRow("Jugo", "7,00 Bs.")
+                    MenuDrinkRow("Soda", "9,00 Bs.")
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .background(Color(0xFF387C3B))
+                    ) {
+                        Text(
+                            text = "EXTRAS",
+                            color = Color.White,
+                            fontSize = 18.sp,
+                            fontWeight = FontWeight.Bold,
+                            modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
+                        )
+                    }
+                    MenuDrinkRow("Papas", "9,00 Bs.")
+                    MenuDrinkRow("Aros de Cebolla", "9,00 Bs.")
+                    Spacer(modifier = Modifier.height(32.dp))
                 }
             }
-            Spacer(modifier = Modifier.height(4.dp))
-            Text(
-                text = "ACLARACIÓN: Todas nuestras Boss incluyen porción de papas :)",
-                fontSize = 12.sp,
-                color = Color(0xFF5A2A06),
-                modifier = Modifier.padding(vertical = 8.dp, horizontal = 8.dp)
-            )
-            // Sección Bebidas
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(Color(0xFF8C1C1C))
-            ) {
-                Text(
-                    text = "BEBIDAS",
-                    color = Color.White,
-                    fontSize = 18.sp,
-                    fontWeight = FontWeight.Bold,
-                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
-                )
-            }
-            MenuDrinkRow("Agua", "9,00 Bs.")
-            MenuDrinkRow("Jugo", "7,00 Bs.")
-            MenuDrinkRow("Soda", "9,00 Bs.")
-            // Sección Extras
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(Color(0xFF387C3B))
-            ) {
-                Text(
-                    text = "EXTRAS",
-                    color = Color.White,
-                    fontSize = 18.sp,
-                    fontWeight = FontWeight.Bold,
-                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
-                )
-            }
-            MenuDrinkRow("Papas", "9,00 Bs.")
-            MenuDrinkRow("Aros de Cebolla", "9,00 Bs.")
-            Spacer(modifier = Modifier.height(32.dp))
         }
         // Barra de navegación inferior fija
         Row(
@@ -231,75 +231,99 @@ fun MenuScreen(viewModel: MenuViewModel) {
 
 @Composable
 fun MenuBurgerCard(imageRes: Int, name: String, desc: String, price: String) {
+    var count by remember { mutableStateOf(0) }
+
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 4.dp),
-        shape = RoundedCornerShape(16.dp),
-        elevation = CardDefaults.cardElevation(4.dp)
+            .padding(horizontal = 16.dp), // Padding horizontal para el card
+        shape = RoundedCornerShape(12.dp),
+        elevation = CardDefaults.cardElevation(4.dp),
+        colors = CardDefaults.cardColors(containerColor = Color.White)
     ) {
-        Row(
-            modifier = Modifier.padding(12.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
+        Column {
             Image(
                 painter = painterResource(id = imageRes),
                 contentDescription = name,
                 modifier = Modifier
-                    .size(80.dp)
-                    .clip(RoundedCornerShape(12.dp))
+                    .fillMaxWidth()
+                    .height(180.dp)
+                    .clip(RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp)),
+                contentScale = ContentScale.Crop
             )
-            Spacer(modifier = Modifier.width(12.dp))
+
             Column(
-                modifier = Modifier.weight(1f)
+                modifier = Modifier.padding(12.dp) // Espaciado interno
             ) {
                 Text(
                     text = name,
                     fontWeight = FontWeight.Bold,
-                    fontSize = 16.sp,
-                    color = Color(0xFF5A2A06)
+                    fontSize = 20.sp,
+                    color = Color.Black
                 )
+                Spacer(modifier = Modifier.height(4.dp))
                 Text(
                     text = desc,
-                    fontSize = 13.sp,
-                    color = Color(0xFF222222)
-                )
-                Text(
-                    text = price,
                     fontSize = 14.sp,
-                    color = Color(0xFF5A2A06),
-                    fontWeight = FontWeight.Bold,
-                    modifier = Modifier.padding(top = 2.dp)
+                    color = Color(0xFF555555) // Gris oscuro
                 )
-            }
-            Spacer(modifier = Modifier.width(8.dp))
-            // Contador
-            Row(
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                IconButton(onClick = { /* TODO: Disminuir */ }) {
-                    Icon(
-                        painter = painterResource(id = R.drawable.ic_minus),
-                        contentDescription = "Menos",
-                        tint = Color(0xFFFFB347),
-                        modifier =Modifier.size(24.dp)
+                Spacer(modifier = Modifier.height(8.dp))
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text(
+                        text = price,
+                        fontSize = 18.sp,
+                        color = Color.Black,
+                        fontWeight = FontWeight.SemiBold,
+                        modifier = Modifier.weight(1f)
                     )
-                }
-                Text(
-                    text = "0",
-                    fontSize = 16.sp,
-                    color = Color(0xFF5A2A06),
-                    modifier = Modifier.width(24.dp),
-                    textAlign = TextAlign.Center
-                )
-                IconButton(onClick = { /* TODO: Aumentar */ }) {
-                    Icon(
-                        painter = painterResource(id = R.drawable.ic_plus),
-                        contentDescription = "Más",
-                        tint = Color(0xFFFFB347),
-                        modifier =Modifier.size(24.dp)
 
-                    )
+                    // 2. CONTADOR DE CANTIDAD REDISEÑADO
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        Button(
+                            onClick = { if (count > 0) count-- },
+                            modifier = Modifier.size(38.dp), // Botón más grande
+                            shape = CircleShape,
+                            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFFFC107)), // Fondo amarillo
+                            contentPadding = PaddingValues(0.dp)
+                        ) {
+                            Icon(
+                                painter = painterResource(id = R.drawable.ic_minus),
+                                contentDescription = "Menos",
+                                tint = Color.Black ,// Ícono negro
+                                modifier = Modifier.size(24.dp)
+
+                            )
+                        }
+
+                        Text(
+                            text = count.toString(),
+                            fontSize = 18.sp,
+                            color = Color.Black,
+                            fontWeight = FontWeight.Bold,
+                            modifier = Modifier.padding(horizontal = 4.dp)
+                        )
+
+                        Button(
+                            onClick = { count++ },
+                            modifier = Modifier.size(38.dp), // Botón más grande
+                            shape = CircleShape,
+                            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFFFC107)), // Fondo amarillo
+                            contentPadding = PaddingValues(0.dp)
+                        ) {
+                            Icon(
+                                painter = painterResource(id = R.drawable.ic_plus),
+                                contentDescription = "Más",
+                                tint = Color.Black, // Ícono negro
+                                modifier = Modifier.size(24.dp)
+                            )
+                        }
+                    }
                 }
             }
         }
@@ -348,7 +372,7 @@ fun BottomNavItem(iconRes: Int, label: String) {
         Box(
             modifier = Modifier
                 .size(45.dp)
-                .background(Color(0xFFFFB347), shape = CircleShape), // Cambiado a color de la barra
+                .background(Color(0xFFFFB347), shape = CircleShape),
             contentAlignment = Alignment.Center
         ) {
 
