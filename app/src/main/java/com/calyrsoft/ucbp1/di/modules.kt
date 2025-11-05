@@ -3,6 +3,10 @@ package com.calyrsoft.ucbp1.di
 import androidx.room.Room
 import com.calyrsoft.ucbp1.R
 import com.calyrsoft.ucbp1.data.local.UcbpDatabase
+import com.calyrsoft.ucbp1.features.loginPart.data.LoginPartRepository
+import com.calyrsoft.ucbp1.features.loginPart.domain.LoginPartUseCase
+import com.calyrsoft.ucbp1.features.loginPart.presentation.LoginPartViewModel
+import com.calyrsoft.ucbp1.features.menu.presentation.MenuViewModel
 import com.calyrsoft.ucbp1.features.registro.data.repository.RegisterRepository
 import com.calyrsoft.ucbp1.features.registro.data.source.local.IRegisterLocalDataSource
 import com.calyrsoft.ucbp1.features.registro.data.source.local.RegisterLocalDataSource
@@ -87,4 +91,18 @@ val appModule = module {
 
     // ViewModel
     viewModel { RegistroViewModel(get()) }
+
+    // --- Flujo de Login Part ---
+
+    // Repositorio
+    single { LoginPartRepository(get()) }
+
+    // Casos de Uso
+    single { LoginPartUseCase(get()) }
+
+    // ViewModel
+    viewModel { LoginPartViewModel(get()) }
+
+    // --- Flujo de Menu ---
+    viewModel { MenuViewModel() }
 }

@@ -9,6 +9,8 @@ import com.calyrsoft.ucbp1.features.login.presentation.LoginScreen
 import com.calyrsoft.ucbp1.features.login.presentation.LoginViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.calyrsoft.ucbp1.features.login.presentation.SplashScreen.SplashScreen
+import com.calyrsoft.ucbp1.features.menu.presentation.MenuScreen
+import com.calyrsoft.ucbp1.features.menu.presentation.MenuViewModel
 import com.calyrsoft.ucbp1.features.registro.presentation.RegistroScreen
 import com.calyrsoft.ucbp1.features.registro.presentation.RegistroViewModel
 import org.koin.androidx.compose.koinViewModel
@@ -38,8 +40,8 @@ fun AppNavigation() {
             )
         }
         composable(Screen.LoginPart.route) {
-            val loginPartViewModel = com.calyrsoft.ucbp1.features.loginPart.presentation.LoginPartViewModel()
-            com.calyrsoft.ucbp1.features.loginPart.presentation.LoginPartScreen(viewModel = loginPartViewModel)
+            val loginPartViewModel: com.calyrsoft.ucbp1.features.loginPart.presentation.LoginPartViewModel = koinViewModel()
+            com.calyrsoft.ucbp1.features.loginPart.presentation.LoginPartScreen(viewModel = loginPartViewModel, navController = navController)
         }
         composable(Screen.Home.route) {
 
@@ -52,8 +54,8 @@ fun AppNavigation() {
             RegistroScreen(viewModel = registroViewModel)
         }
         composable(Screen.Menu.route) {
-            val menuViewModel = com.calyrsoft.ucbp1.features.menu.presentation.MenuViewModel()
-            com.calyrsoft.ucbp1.features.menu.presentation.MenuScreen(viewModel = menuViewModel)
+            val menuViewModel: MenuViewModel = koinViewModel()
+            MenuScreen(viewModel = menuViewModel)
         }
     }
 }

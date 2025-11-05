@@ -3,8 +3,9 @@ package com.calyrsoft.ucbp1.features.menu.presentation
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.lifecycle.ViewModel
 
-class MenuViewModel {
+class MenuViewModel : ViewModel() {
     // Contadores para cada hamburguesa
     var bossguerCount by mutableStateOf(0)
     var jefazaCount by mutableStateOf(0)
