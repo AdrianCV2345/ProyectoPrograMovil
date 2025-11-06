@@ -3,6 +3,7 @@ package com.calyrsoft.ucbp1.di
 import androidx.room.Room
 import com.calyrsoft.ucbp1.R
 import com.calyrsoft.ucbp1.data.local.UcbpDatabase
+import com.calyrsoft.ucbp1.features.carrito.ui.CartViewModel
 import com.calyrsoft.ucbp1.features.loginPart.data.LoginPartRepository
 import com.calyrsoft.ucbp1.features.loginPart.domain.LoginPartUseCase
 import com.calyrsoft.ucbp1.features.loginPart.presentation.LoginPartViewModel
@@ -105,4 +106,7 @@ val appModule = module {
 
     // --- Flujo de Menu ---
     viewModel { MenuViewModel() }
+
+    // --- Flujo de Carrito ---
+    viewModel { CartViewModel() }
 }

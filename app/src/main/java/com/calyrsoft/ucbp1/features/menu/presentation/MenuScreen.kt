@@ -26,10 +26,8 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -41,12 +39,20 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.calyrsoft.ucbp1.R
+import com.calyrsoft.ucbp1.features.carrito.data.Product
+import com.calyrsoft.ucbp1.features.carrito.ui.CartViewModel
 
 // Data class para representar una hamburguesa, facilita la gestión
 data class Burger(val name: String, val desc: String, val price: String, val imageRes: Int)
 
 @Composable
-fun MenuScreen(viewModel: MenuViewModel, onBack: () -> Unit, onCartClick: () -> Unit) {
+fun MenuScreen(
+    viewModel: MenuViewModel,
+    cartViewModel: CartViewModel,
+    onBack: () -> Unit,
+    onCartClick: () -> Unit,
+    onProductAdded: () -> Unit
+) {
     // Lista de hamburguesas (puedes mover esto a tu ViewModel)
     val burgers = listOf(
         Burger("Bossguer", "La original, inigualable e inconfundible.", "35,00 Bs.", R.drawable.burger_bossguer),
@@ -55,6 +61,7 @@ fun MenuScreen(viewModel: MenuViewModel, onBack: () -> Unit, onCartClick: () -> 
         Burger("La Ejecutiva", "Elegante, potente y llena de poder.", "37,00 Bs.", R.drawable.burger_ejecutiva),
         Burger("Arma La Tuya!", "Hoy, tú eres el Boss!", "35,00 Bs.", R.drawable.burger_custom)
     )
+    val cartState by cartViewModel.uiState.collectAsState()
 
     Box(
         modifier = Modifier
@@ -157,14 +164,27 @@ fun MenuScreen(viewModel: MenuViewModel, onBack: () -> Unit, onCartClick: () -> 
             }
             // Lista de tarjetas de hamburguesas
             items(burgers) { burger ->
-                MenuBurgerCard(
-                    imageRes = burger.imageRes,
+                val product = Product(
+                    id = burger.name, // Using name as ID is not ideal, but works for this scope
                     name = burger.name,
-                    desc = burger.desc,
-                    price = burger.price
+                    price = burger.price.replace(",", ".").replace(" Bs.", "").trim().toDouble(),
+                    image = burger.imageRes
+                )
+                val quantity = cartState.items.find { it.product.id == product.id }?.quantity ?: 0
+
+                MenuBurgerCard(
+                    burger = burger,
+                    quantityInCart = quantity,
+                    onAddToCart = {
+                        cartViewModel.addProduct(product)
+                        onProductAdded()
+                    },
+                    onRemoveFromCart = {
+                        cartViewModel.removeProduct(product)
+                    }
                 )
             }
-            
+
             item {
                 // Sección final con aclaración, bebidas y extras
                 Column(
@@ -232,9 +252,12 @@ fun MenuScreen(viewModel: MenuViewModel, onBack: () -> Unit, onCartClick: () -> 
 }
 
 @Composable
-fun MenuBurgerCard(imageRes: Int, name: String, desc: String, price: String) {
-    var count by remember { mutableStateOf(0) }
-
+fun MenuBurgerCard(
+    burger: Burger,
+    quantityInCart: Int,
+    onAddToCart: () -> Unit,
+    onRemoveFromCart: () -> Unit
+) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -245,8 +268,8 @@ fun MenuBurgerCard(imageRes: Int, name: String, desc: String, price: String) {
     ) {
         Column {
             Image(
-                painter = painterResource(id = imageRes),
-                contentDescription = name,
+                painter = painterResource(id = burger.imageRes),
+                contentDescription = burger.name,
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(180.dp)
@@ -258,14 +281,14 @@ fun MenuBurgerCard(imageRes: Int, name: String, desc: String, price: String) {
                 modifier = Modifier.padding(12.dp) // Espaciado interno
             ) {
                 Text(
-                    text = name,
+                    text = burger.name,
                     fontWeight = FontWeight.Bold,
                     fontSize = 20.sp,
                     color = Color.Black
                 )
                 Spacer(modifier = Modifier.height(4.dp))
                 Text(
-                    text = desc,
+                    text = burger.desc,
                     fontSize = 14.sp,
                     color = Color(0xFF555555) // Gris oscuro
                 )
@@ -275,7 +298,7 @@ fun MenuBurgerCard(imageRes: Int, name: String, desc: String, price: String) {
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Text(
-                        text = price,
+                        text = burger.price,
                         fontSize = 18.sp,
                         color = Color.Black,
                         fontWeight = FontWeight.SemiBold,
@@ -288,7 +311,8 @@ fun MenuBurgerCard(imageRes: Int, name: String, desc: String, price: String) {
                         horizontalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
                         Button(
-                            onClick = { if (count > 0) count-- },
+                            onClick = onRemoveFromCart,
+                            enabled = quantityInCart > 0,
                             modifier = Modifier.size(38.dp), // Botón más grande
                             shape = CircleShape,
                             colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFFFC107)), // Fondo amarillo
@@ -303,7 +327,7 @@ fun MenuBurgerCard(imageRes: Int, name: String, desc: String, price: String) {
                         }
 
                         Text(
-                            text = count.toString(),
+                            text = quantityInCart.toString(),
                             fontSize = 18.sp,
                             color = Color.Black,
                             fontWeight = FontWeight.Bold,
@@ -311,7 +335,7 @@ fun MenuBurgerCard(imageRes: Int, name: String, desc: String, price: String) {
                         )
 
                         Button(
-                            onClick = { count++ },
+                            onClick = onAddToCart,
                             modifier = Modifier.size(38.dp), // Botón más grande
                             shape = CircleShape,
                             colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFFFC107)), // Fondo amarillo
