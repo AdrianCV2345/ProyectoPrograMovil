@@ -8,6 +8,7 @@ import androidx.navigation.compose.rememberNavController
 import com.calyrsoft.ucbp1.features.login.presentation.LoginScreen
 import com.calyrsoft.ucbp1.features.login.presentation.LoginViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.calyrsoft.ucbp1.features.carrito.presentation.CarritoVacioScreen
 import com.calyrsoft.ucbp1.features.login.presentation.SplashScreen.SplashScreen
 import com.calyrsoft.ucbp1.features.menu.presentation.MenuScreen
 import com.calyrsoft.ucbp1.features.menu.presentation.MenuViewModel
@@ -21,7 +22,7 @@ fun AppNavigation() {
 
     NavHost(
         navController = navController,
-        startDestination = Screen.SplashScreen.route // Inicia en el SplashScreen
+        startDestination = Screen.SplashScreen.route // Inicia en el Carrito Vacio Screen
     ) {
         composable(Screen.SplashScreen.route) {
             SplashScreen(onNavigate = {
@@ -55,7 +56,14 @@ fun AppNavigation() {
         }
         composable(Screen.Menu.route) {
             val menuViewModel: MenuViewModel = koinViewModel()
-            MenuScreen(viewModel = menuViewModel)
+            MenuScreen(
+                viewModel = menuViewModel,
+                onBack = { navController.popBackStack() },
+                onCartClick = { navController.navigate(Screen.CarritoVacio.route) }
+            )
+        }
+        composable(Screen.CarritoVacio.route) {
+            CarritoVacioScreen(onBack = { navController.popBackStack() })
         }
     }
 }

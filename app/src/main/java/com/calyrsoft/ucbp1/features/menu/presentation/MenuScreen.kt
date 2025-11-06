@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
@@ -45,7 +46,7 @@ import com.calyrsoft.ucbp1.R
 data class Burger(val name: String, val desc: String, val price: String, val imageRes: Int)
 
 @Composable
-fun MenuScreen(viewModel: MenuViewModel) {
+fun MenuScreen(viewModel: MenuViewModel, onBack: () -> Unit, onCartClick: () -> Unit) {
     // Lista de hamburguesas (puedes mover esto a tu ViewModel)
     val burgers = listOf(
         Burger("Bossguer", "La original, inigualable e inconfundible.", "35,00 Bs.", R.drawable.burger_bossguer),
@@ -109,11 +110,12 @@ fun MenuScreen(viewModel: MenuViewModel) {
                         modifier = Modifier
                             .fillMaxWidth()
                             .background(Color(0xFFF4D8CD).copy(alpha = 0.85f))
-                            .align(Alignment.TopCenter),
+                            .align(Alignment.TopCenter)
+                            .statusBarsPadding(), // <- AQUÍ ESTÁ LA SOLUCIÓN
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
-                        IconButton(onClick = { /* TODO: Navegar atrás */ }) {
+                        IconButton(onClick = onBack) {
                             Icon(
                                 painter = painterResource(id = R.drawable.ic_back),
                                 contentDescription = "Atrás",
@@ -126,7 +128,7 @@ fun MenuScreen(viewModel: MenuViewModel) {
                             contentDescription = "Logo Bossguer",
                             modifier = Modifier.size(56.dp)
                         )
-                        IconButton(onClick = { /* TODO: Ir al carrito */ }) {
+                        IconButton(onClick = onCartClick) {
                             Icon(
                                 painter = painterResource(id = R.drawable.ic_cart),
                                 contentDescription = "Carrito",
@@ -297,7 +299,6 @@ fun MenuBurgerCard(imageRes: Int, name: String, desc: String, price: String) {
                                 contentDescription = "Menos",
                                 tint = Color.Black ,// Ícono negro
                                 modifier = Modifier.size(24.dp)
-
                             )
                         }
 
