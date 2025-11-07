@@ -61,7 +61,7 @@ fun AppNavigation() {
                 cartViewModel = cartViewModel,
                 onBack = { navController.popBackStack() },
                 onCartClick = { navController.navigate(Screen.Order.route) },
-                onProductAdded = { navController.navigate(Screen.Order.route) }
+                onProductAdded = {}
             )
         }
         
