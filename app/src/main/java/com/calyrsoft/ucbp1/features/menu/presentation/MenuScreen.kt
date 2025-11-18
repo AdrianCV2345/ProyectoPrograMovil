@@ -57,7 +57,6 @@ fun MenuScreen(
     val burgers = listOf(
         Burger("Bossguer", "La original, inigualable e inconfundible.", "35,00 Bs.", R.drawable.burger_bossguer),
         Burger("La Jefaza", "Cargada con todo, solo para los verdaderos jefes.", "37,00 Bs.", R.drawable.burger_jefaza),
-        Burger("Bossguer", "La original, inigualable e inconfundible.", "35,00 Bs.", R.drawable.burger_bossguer),
         Burger("La Ejecutiva", "Elegante, potente y llena de poder.", "37,00 Bs.", R.drawable.burger_ejecutiva),
         Burger("Arma La Tuya!", "Hoy, tú eres el Boss!", "35,00 Bs.", R.drawable.burger_custom)
     )
