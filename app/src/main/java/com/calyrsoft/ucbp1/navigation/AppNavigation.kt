@@ -8,6 +8,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.calyrsoft.ucbp1.features.carrito.ui.CartViewModel
 import com.calyrsoft.ucbp1.features.carrito.ui.OrderScreen
+import com.calyrsoft.ucbp1.features.carrito.ui.OrderSuccessScreen
 import com.calyrsoft.ucbp1.features.login.presentation.LoginScreen
 import com.calyrsoft.ucbp1.features.login.presentation.LoginViewModel
 import com.calyrsoft.ucbp1.features.login.presentation.SplashScreen.SplashScreen
@@ -64,11 +65,23 @@ fun AppNavigation() {
                 onProductAdded = {}
             )
         }
-        
+
         composable(Screen.Order.route) {
             OrderScreen(
                 cartViewModel = cartViewModel,
-                onBack = { navController.popBackStack() }
+                onBack = { navController.popBackStack() },
+                onOrderSuccess = { navController.navigate("orderSuccess") }
+            )
+        }
+        composable("orderSuccess") {
+            OrderSuccessScreen(
+                onTimeout = {
+                    navController.navigate(Screen.Menu.route) {
+                        popUpTo(navController.graph.startDestinationId) {
+                            inclusive = true
+                        }
+                    }
+                }
             )
         }
     }

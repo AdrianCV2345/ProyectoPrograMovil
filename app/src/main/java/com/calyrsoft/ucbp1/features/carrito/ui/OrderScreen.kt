@@ -31,7 +31,7 @@ import com.google.zxing.EncodeHintType
 import com.google.zxing.qrcode.QRCodeWriter
 
 @Composable
-fun OrderScreen(cartViewModel: CartViewModel, onBack: () -> Unit) {
+fun OrderScreen(cartViewModel: CartViewModel, onBack: () -> Unit, onOrderSuccess: () -> Unit) {
     val uiState by cartViewModel.uiState.collectAsState()
     var deliverySelected by remember { mutableStateOf(true) }
     var paymentMethod by remember { mutableStateOf("QR") }
@@ -80,7 +80,10 @@ fun OrderScreen(cartViewModel: CartViewModel, onBack: () -> Unit) {
                     )
                 }
             }
-            Footer(total = uiState.total, deliverySelected = deliverySelected)
+            Footer(
+                total = uiState.total,
+                deliverySelected = deliverySelected,
+                onOrderSuccess = onOrderSuccess)
         }
     }
 }
@@ -263,7 +266,7 @@ fun DeliveryOptions(
 }
 
 @Composable
-fun Footer(total: Double, deliverySelected: Boolean) {
+fun Footer(total: Double, deliverySelected: Boolean, onOrderSuccess: () -> Unit) {
     val finalTotal = if (deliverySelected) total + 10 else total
     Column(
         modifier = Modifier
@@ -292,7 +295,7 @@ fun Footer(total: Double, deliverySelected: Boolean) {
         }
         Spacer(modifier = Modifier.height(16.dp))
         Button(
-            onClick = { /* TODO: Handle order finalization */ },
+            onClick = { onOrderSuccess() },
             modifier = Modifier.fillMaxWidth(),
             colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFF9A825)),
             shape = RoundedCornerShape(8.dp)
