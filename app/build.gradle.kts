@@ -71,6 +71,7 @@ dependencies {
     implementation(libs.coil.compose)
     implementation(libs.coil.network)
     implementation(libs.androidx.navigation.compose)
+    implementation("com.google.zxing:core:3.5.4")
 
     //local bundle room
     implementation(libs.bundles.local)

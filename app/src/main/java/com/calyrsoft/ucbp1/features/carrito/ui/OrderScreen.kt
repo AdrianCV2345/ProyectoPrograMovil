@@ -1,44 +1,34 @@
+
 package com.calyrsoft.ucbp1.features.carrito.ui
 
+import android.graphics.Bitmap
+import android.graphics.Color as AndroidColor
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.calyrsoft.ucbp1.R
 import com.calyrsoft.ucbp1.features.carrito.data.CartItem
+import com.google.zxing.BarcodeFormat
+import com.google.zxing.EncodeHintType
+import com.google.zxing.qrcode.QRCodeWriter
 
 @Composable
 fun OrderScreen(cartViewModel: CartViewModel, onBack: () -> Unit) {
@@ -85,11 +75,12 @@ fun OrderScreen(cartViewModel: CartViewModel, onBack: () -> Unit) {
                         deliverySelected = deliverySelected,
                         onDeliverySelected = { deliverySelected = it },
                         paymentMethod = paymentMethod,
-                        onPaymentMethodSelected = { paymentMethod = it }
+                        onPaymentMethodSelected = { paymentMethod = it },
+                        total = uiState.total
                     )
                 }
             }
-            Footer(total = uiState.total)
+            Footer(total = uiState.total, deliverySelected = deliverySelected)
         }
     }
 }
@@ -181,7 +172,8 @@ fun DeliveryOptions(
     deliverySelected: Boolean,
     onDeliverySelected: (Boolean) -> Unit,
     paymentMethod: String,
-    onPaymentMethodSelected: (String) -> Unit
+    onPaymentMethodSelected: (String) -> Unit,
+    total: Double
 ) {
     Column(modifier = Modifier.padding(16.dp)) {
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
@@ -253,23 +245,26 @@ fun DeliveryOptions(
             }
         }
         if (paymentMethod == "QR") {
-            Spacer(modifier = Modifier.height(8.dp))
-            Box(
+            Spacer(modifier = Modifier.height(16.dp))
+            val qrBitmap = remember(total, deliverySelected) {
+                val totalToPay = if (deliverySelected) total + 10 else total
+                generateQrCodeBitmap("Total: Bs. ${"%.2f".format(totalToPay)}", 400)
+            }
+            Image(
+                bitmap = qrBitmap,
+                contentDescription = "Código QR",
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(150.dp)
-                    .background(Color.LightGray, RoundedCornerShape(8.dp)),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(text = "Imagen de QR")
-            }
+                    .height(200.dp)
+                    .padding(16.dp)
+            )
         }
     }
 }
 
-
 @Composable
-fun Footer(total: Double) {
+fun Footer(total: Double, deliverySelected: Boolean) {
+    val finalTotal = if (deliverySelected) total + 10 else total
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -284,10 +279,25 @@ fun Footer(total: Double) {
             fontWeight = FontWeight.Bold
         )
         Text(
-            text = "Bs. ${"%.2f".format(total)}",
+            text = "Bs. ${"%.2f".format(finalTotal)}",
             color = Color(0xFF2E5E3E),
             fontSize = 18.sp,
             fontWeight = FontWeight.Bold
         )
     }
+}
+
+fun generateQrCodeBitmap(content: String, size: Int): ImageBitmap {
+    val writer = QRCodeWriter()
+    val hints = mapOf<EncodeHintType, Any>(EncodeHintType.CHARACTER_SET to "UTF-8")
+    val bitMatrix = writer.encode(content, BarcodeFormat.QR_CODE, size, size, hints)
+    val width = bitMatrix.width
+    val height = bitMatrix.height
+    val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565)
+    for (x in 0 until width) {
+        for (y in 0 until height) {
+            bitmap.setPixel(x, y, if (bitMatrix[x, y]) AndroidColor.BLACK else AndroidColor.WHITE)
+        }
+    }
+    return bitmap.asImageBitmap()
 }
