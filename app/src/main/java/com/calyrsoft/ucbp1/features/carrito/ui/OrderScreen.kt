@@ -265,25 +265,45 @@ fun DeliveryOptions(
 @Composable
 fun Footer(total: Double, deliverySelected: Boolean) {
     val finalTotal = if (deliverySelected) total + 10 else total
-    Row(
+    Column(
         modifier = Modifier
             .fillMaxWidth()
             .padding(16.dp),
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(
-            text = "Total del pedido",
-            color = Color(0xFF4B2A10),
-            fontSize = 18.sp,
-            fontWeight = FontWeight.Bold
-        )
-        Text(
-            text = "Bs. ${"%.2f".format(finalTotal)}",
-            color = Color(0xFF2E5E3E),
-            fontSize = 18.sp,
-            fontWeight = FontWeight.Bold
-        )
+        Row(
+            modifier = Modifier
+                .fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                text = "Total del pedido",
+                color = Color(0xFF4B2A10),
+                fontSize = 18.sp,
+                fontWeight = FontWeight.Bold
+            )
+            Text(
+                text = "Bs. ${"%.2f".format(finalTotal)}",
+                color = Color(0xFF2E5E3E),
+                fontSize = 18.sp,
+                fontWeight = FontWeight.Bold
+            )
+        }
+        Spacer(modifier = Modifier.height(16.dp))
+        Button(
+            onClick = { /* TODO: Handle order finalization */ },
+            modifier = Modifier.fillMaxWidth(),
+            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFF9A825)),
+            shape = RoundedCornerShape(8.dp)
+        ) {
+            Text(
+                text = "Finalizar pedido",
+                color = Color.White,
+                fontSize = 16.sp,
+                fontWeight = FontWeight.Bold
+            )
+        }
     }
 }
 
